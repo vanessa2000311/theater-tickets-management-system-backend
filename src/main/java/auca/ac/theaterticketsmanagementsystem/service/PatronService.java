@@ -30,6 +30,10 @@ public class PatronService {
         return patronRepository.findById(id);
     }
 
+    public List<Patron> getPatronsByLastName(String lastName) {
+        return patronRepository.findByLastNameIgnoreCaseOrderByFirstNameAsc(lastName);
+    }
+
     public String updatePatron(UUID id, Patron updatedPatron) {
         Optional<Patron> existingPatron = patronRepository.findById(id);
 

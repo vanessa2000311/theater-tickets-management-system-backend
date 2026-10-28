@@ -1,6 +1,7 @@
 
 package auca.ac.theaterticketsmanagementsystem.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import auca.ac.theaterticketsmanagementsystem.model.BookingStatus;
 import auca.ac.theaterticketsmanagementsystem.model.TicketBooking;
 import auca.ac.theaterticketsmanagementsystem.service.TicketBookingService;
 
@@ -36,6 +39,24 @@ public class TicketBookingController {
     @GetMapping("/all")
     public ResponseEntity<List<TicketBooking>> getAllTicketBookings() {
         List<TicketBooking> bookings = ticketBookingService.getAllTicketBookings();
+        return new ResponseEntity<>(bookings, HttpStatus.OK);
+    }
+
+    @GetMapping("/by-status")
+    public ResponseEntity<List<TicketBooking>> getTicketBookingsByStatus(@RequestParam BookingStatus status) {
+        List<TicketBooking> bookings = ticketBookingService.getTicketBookingsByStatus(status);
+        return new ResponseEntity<>(bookings, HttpStatus.OK);
+    }
+
+    @GetMapping("/between")
+    public ResponseEntity<List<TicketBooking>> getTicketBookingsBetweenDates(
+            @RequestParam String start,
+            @RequestParam String end) {
+
+        LocalDate startDate = LocalDate.parse(start);
+        LocalDate endDate = LocalDate.parse(end);
+
+        List<TicketBooking> bookings = ticketBookingService.getTicketBookingsBetweenDates(startDate, endDate);
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 

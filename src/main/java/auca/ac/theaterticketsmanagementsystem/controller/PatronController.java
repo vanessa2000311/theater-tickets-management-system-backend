@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import auca.ac.theaterticketsmanagementsystem.model.Patron;
@@ -36,6 +37,12 @@ public class PatronController {
     @GetMapping("/all")
     public ResponseEntity<List<Patron>> getAllPatrons() {
         List<Patron> patrons = patronService.getAllPatrons();
+        return new ResponseEntity<>(patrons, HttpStatus.OK);
+    }
+
+    @GetMapping("/by-last-name")
+    public ResponseEntity<List<Patron>> getPatronsByLastName(@RequestParam String lastName) {
+        List<Patron> patrons = patronService.getPatronsByLastName(lastName);
         return new ResponseEntity<>(patrons, HttpStatus.OK);
     }
 

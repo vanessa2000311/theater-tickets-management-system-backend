@@ -1,6 +1,7 @@
 
 package auca.ac.theaterticketsmanagementsystem.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -8,6 +9,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import auca.ac.theaterticketsmanagementsystem.model.BookingStatus;
 import auca.ac.theaterticketsmanagementsystem.model.TicketBooking;
 import auca.ac.theaterticketsmanagementsystem.repository.TicketBookingRepository;
 
@@ -28,6 +30,14 @@ public class TicketBookingService {
 
     public Optional<TicketBooking> getTicketBookingById(UUID id) {
         return ticketBookingRepository.findById(id);
+    }
+
+    public List<TicketBooking> getTicketBookingsByStatus(BookingStatus status) {
+        return ticketBookingRepository.findByStatusOrderByShowDateAsc(status);
+    }
+
+    public List<TicketBooking> getTicketBookingsBetweenDates(LocalDate start, LocalDate end) {
+        return ticketBookingRepository.findByShowDateBetweenOrderByShowDateAsc(start, end);
     }
 
     public String updateTicketBooking(UUID id, TicketBooking updatedBooking) {
