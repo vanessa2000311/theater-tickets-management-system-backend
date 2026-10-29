@@ -1,4 +1,3 @@
-
 package auca.ac.theaterticketsmanagementsystem.service;
 
 import java.util.List;
@@ -24,6 +23,10 @@ public class CashierService {
 
     public List<Cashier> getAllCashiers() {
         return cashierRepository.findAll();
+    }
+
+    public List<Cashier> getCashiersByTicketClass(String name) {
+        return cashierRepository.findByTicketClassName(name);
     }
 
     public Optional<Cashier> getCashierById(UUID id) {

@@ -1,5 +1,4 @@
 
-
 package auca.ac.theaterticketsmanagementsystem.controller;
 
 import java.util.List;
@@ -37,6 +36,12 @@ public class BoxOfficeCounterController {
     @GetMapping("/all")
     public ResponseEntity<List<BoxOfficeCounter>> getAllBoxOfficeCounters() {
         List<BoxOfficeCounter> counters = boxOfficeCounterService.getAllBoxOfficeCounters();
+        return new ResponseEntity<>(counters, HttpStatus.OK);
+    }
+
+    @GetMapping("/free")
+    public ResponseEntity<List<BoxOfficeCounter>> getFreeBoxOfficeCounters() {
+        List<BoxOfficeCounter> counters = boxOfficeCounterService.getFreeBoxOfficeCounters();
         return new ResponseEntity<>(counters, HttpStatus.OK);
     }
 

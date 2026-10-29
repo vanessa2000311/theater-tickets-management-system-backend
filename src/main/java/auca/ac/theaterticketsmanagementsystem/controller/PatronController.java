@@ -46,6 +46,16 @@ public class PatronController {
         return new ResponseEntity<>(patrons, HttpStatus.OK);
     }
 
+    @GetMapping("/of-cashier/{cashierId}")
+    public ResponseEntity<?> getPatronsByCashierId(@PathVariable UUID cashierId) {
+        if (!patronService.cashierExists(cashierId)) {
+            return new ResponseEntity<>("The cashier with that id does not exist", HttpStatus.NOT_FOUND);
+        } else {
+            List<Patron> patrons = patronService.getPatronsByCashierId(cashierId);
+            return new ResponseEntity<>(patrons, HttpStatus.OK);
+        }
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getPatronById(@PathVariable UUID id) {
         Optional<Patron> patron = patronService.getPatronById(id);

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import auca.ac.theaterticketsmanagementsystem.model.Patron;
+import auca.ac.theaterticketsmanagementsystem.repository.CashierRepository;
 import auca.ac.theaterticketsmanagementsystem.repository.PatronRepository;
 
 @Service
@@ -16,6 +17,9 @@ public class PatronService {
 
     @Autowired
     private PatronRepository patronRepository;
+
+    @Autowired
+    private CashierRepository cashierRepository;
 
     public String savePatron(Patron patron) {
         patronRepository.save(patron);
@@ -32,6 +36,14 @@ public class PatronService {
 
     public List<Patron> getPatronsByLastName(String lastName) {
         return patronRepository.findByLastNameIgnoreCaseOrderByFirstNameAsc(lastName);
+    }
+
+    public boolean cashierExists(UUID cashierId) {
+        return cashierRepository.existsById(cashierId);
+    }
+
+    public List<Patron> getPatronsByCashierId(UUID cashierId) {
+        return patronRepository.findPatronsByCashierId(cashierId);
     }
 
     public String updatePatron(UUID id, Patron updatedPatron) {

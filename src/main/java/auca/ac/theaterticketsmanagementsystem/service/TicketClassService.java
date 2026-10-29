@@ -26,6 +26,10 @@ public class TicketClassService {
         return ticketClassRepository.findAll();
     }
 
+    public List<TicketClass> getUnusedTicketClasses() {
+        return ticketClassRepository.findUnusedTicketClasses();
+    }
+
     public Optional<TicketClass> getTicketClassById(UUID id) {
         return ticketClassRepository.findById(id);
     }

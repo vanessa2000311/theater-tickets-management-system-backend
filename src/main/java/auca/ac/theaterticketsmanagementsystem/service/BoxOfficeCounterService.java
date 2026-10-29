@@ -26,6 +26,10 @@ public class BoxOfficeCounterService {
         return boxOfficeCounterRepository.findAll();
     }
 
+    public List<BoxOfficeCounter> getFreeBoxOfficeCounters() {
+        return boxOfficeCounterRepository.findFreeBoxOfficeCounters();
+    }
+
     public Optional<BoxOfficeCounter> getBoxOfficeCounterById(UUID id) {
         return boxOfficeCounterRepository.findById(id);
     }

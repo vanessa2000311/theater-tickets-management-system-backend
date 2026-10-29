@@ -39,6 +39,12 @@ public class TicketClassController {
         return new ResponseEntity<>(ticketClasses, HttpStatus.OK);
     }
 
+    @GetMapping("/unused")
+    public ResponseEntity<List<TicketClass>> getUnusedTicketClasses() {
+        List<TicketClass> ticketClasses = ticketClassService.getUnusedTicketClasses();
+        return new ResponseEntity<>(ticketClasses, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getTicketClassById(@PathVariable UUID id) {
         Optional<TicketClass> ticketClass = ticketClassService.getTicketClassById(id);

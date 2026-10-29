@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import auca.ac.theaterticketsmanagementsystem.model.Cashier;
@@ -36,6 +37,12 @@ public class CashierController {
     @GetMapping("/all")
     public ResponseEntity<List<Cashier>> getAllCashiers() {
         List<Cashier> cashiers = cashierService.getAllCashiers();
+        return new ResponseEntity<>(cashiers, HttpStatus.OK);
+    }
+
+    @GetMapping("/by-ticket-class")
+    public ResponseEntity<List<Cashier>> getCashiersByTicketClass(@RequestParam String name) {
+        List<Cashier> cashiers = cashierService.getCashiersByTicketClass(name);
         return new ResponseEntity<>(cashiers, HttpStatus.OK);
     }
 
@@ -72,3 +79,4 @@ public class CashierController {
         }
     }
 }
+
