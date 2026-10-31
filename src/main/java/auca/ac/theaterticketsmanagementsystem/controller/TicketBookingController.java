@@ -68,6 +68,25 @@ public class TicketBookingController {
         return new ResponseEntity<>(bookings, HttpStatus.OK);
     }
 
+    @GetMapping("/stats/by-status")
+    public ResponseEntity<List<Object[]>> getTicketBookingStatsByStatus() {
+        List<Object[]> stats = ticketBookingService.getTicketBookingStatsByStatus();
+        return new ResponseEntity<>(stats, HttpStatus.OK);
+    }
+
+    @PatchMapping("/cancel-day")
+    public ResponseEntity<String> cancelBookingsByCashierAndDate(
+            @RequestParam UUID cashierId,
+            @RequestParam String date) {
+
+        LocalDate showDate = LocalDate.parse(date);
+
+        String message = ticketBookingService.cancelBookingsByCashierAndDate(
+                cashierId, showDate);
+
+        return new ResponseEntity<>(message, HttpStatus.OK);
+    }
+
     @PatchMapping("/{id}/status")
     public ResponseEntity<String> changeTicketBookingStatus(
             @PathVariable UUID id,

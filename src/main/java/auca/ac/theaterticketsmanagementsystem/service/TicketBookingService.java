@@ -66,6 +66,21 @@ public class TicketBookingService {
         return ticketBookingRepository.findByShowDateBetweenOrderByShowDateAsc(start, end);
     }
 
+    public List<Object[]> getTicketBookingStatsByStatus() {
+        return ticketBookingRepository.countTicketBookingsByStatus();
+    }
+
+    public String cancelBookingsByCashierAndDate(UUID cashierId, LocalDate date) {
+
+        int count = ticketBookingRepository.cancelBookingsByCashierAndDate(
+                cashierId,
+                date,
+                BookingStatus.CANCELLED,
+                BookingStatus.PAID);
+
+        return count + " ticket bookings cancelled";
+    }
+
     public String changeTicketBookingStatus(UUID id, BookingStatus newStatus) {
         Optional<TicketBooking> existingBooking = ticketBookingRepository.findById(id);
 
