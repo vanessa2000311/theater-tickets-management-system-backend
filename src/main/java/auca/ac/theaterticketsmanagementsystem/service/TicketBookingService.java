@@ -12,12 +12,16 @@ import org.springframework.stereotype.Service;
 import auca.ac.theaterticketsmanagementsystem.model.BookingStatus;
 import auca.ac.theaterticketsmanagementsystem.model.TicketBooking;
 import auca.ac.theaterticketsmanagementsystem.repository.TicketBookingRepository;
+import auca.ac.theaterticketsmanagementsystem.repository.TicketRepository;
 
 @Service
 public class TicketBookingService {
 
     @Autowired
     private TicketBookingRepository ticketBookingRepository;
+
+    @Autowired
+    private TicketRepository ticketRepository;
 
     public String saveTicketBooking(TicketBooking ticketBooking) {
 
@@ -119,11 +123,16 @@ public class TicketBookingService {
     public String deleteTicketBooking(UUID id) {
         Optional<TicketBooking> existingBooking = ticketBookingRepository.findById(id);
 
-        if (existingBooking.isPresent()) {
-            ticketBookingRepository.deleteById(id);
-            return "Ticket booking deleted successfully";
-        } else {
+        if (existingBooking.isEmpty()) {
             return "The ticket booking with that id does not exist";
         }
+
+        if (ticketRepository.existsByTicketBookingId(id)) {
+            return "That ticket booking has tickets, delete them first";
+        }
+
+        ticketBookingRepository.deleteById(id);
+
+        return "Ticket booking deleted successfully";
     }
 }

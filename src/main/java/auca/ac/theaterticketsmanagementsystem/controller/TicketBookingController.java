@@ -115,6 +115,8 @@ public class TicketBookingController {
 
         if (message.equals("The ticket booking with that id does not exist")) {
             return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        } else if (message.equals("That ticket booking has tickets, delete them first")) {
+            return new ResponseEntity<>(message, HttpStatus.CONFLICT);
         } else {
             return new ResponseEntity<>(message, HttpStatus.OK);
         }
