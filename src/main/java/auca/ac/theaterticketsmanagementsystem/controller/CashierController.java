@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -46,6 +47,40 @@ public class CashierController {
         return new ResponseEntity<>(cashiers, HttpStatus.OK);
     }
 
+    @PutMapping("/{cashierId}/ticket-classes/{ticketClassId}")
+    public ResponseEntity<String> addTicketClassToCashier(
+            @PathVariable UUID cashierId,
+            @PathVariable UUID ticketClassId) {
+
+        String message = cashierService.addTicketClassToCashier(cashierId, ticketClassId);
+
+        if (message.equals("The cashier with that id does not exist") ||
+                message.equals("That ticket class does not exist")) {
+            return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        } else if (message.equals("The cashier already has that ticket class")) {
+            return new ResponseEntity<>(message, HttpStatus.CONFLICT);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }
+    }
+
+    @PatchMapping("/{cashierId}/box-office-counter")
+    public ResponseEntity<String> changeCashierBoxOfficeCounter(
+            @PathVariable UUID cashierId,
+            @RequestParam int counterNumber) {
+
+        String message = cashierService.changeCashierBoxOfficeCounter(cashierId, counterNumber);
+
+        if (message.equals("The cashier with that id does not exist") ||
+                message.equals("That box office counter does not exist")) {
+            return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        } else if (message.equals("That box office counter is taken by another cashier")) {
+            return new ResponseEntity<>(message, HttpStatus.CONFLICT);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getCashierById(@PathVariable UUID id) {
         Optional<Cashier> cashier = cashierService.getCashierById(id);
@@ -79,4 +114,3 @@ public class CashierController {
         }
     }
 }
-

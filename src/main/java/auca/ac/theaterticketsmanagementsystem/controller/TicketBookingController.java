@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -33,7 +34,14 @@ public class TicketBookingController {
     @PostMapping("/save")
     public ResponseEntity<String> saveTicketBooking(@RequestBody TicketBooking ticketBooking) {
         String message = ticketBookingService.saveTicketBooking(ticketBooking);
-        return new ResponseEntity<>(message, HttpStatus.CREATED);
+
+        if (message.equals("Ticket booking date cannot be in the past")) {
+            return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+        } else if (message.equals("Cashier already processes a booking for that show date")) {
+            return new ResponseEntity<>(message, HttpStatus.CONFLICT);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.CREATED);
+        }
     }
 
     @GetMapping("/all")
@@ -58,6 +66,22 @@ public class TicketBookingController {
 
         List<TicketBooking> bookings = ticketBookingService.getTicketBookingsBetweenDates(startDate, endDate);
         return new ResponseEntity<>(bookings, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<String> changeTicketBookingStatus(
+            @PathVariable UUID id,
+            @RequestParam BookingStatus status) {
+
+        String message = ticketBookingService.changeTicketBookingStatus(id, status);
+
+        if (message.equals("The ticket booking with that id does not exist")) {
+            return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+        } else if (message.startsWith("Cannot change status from")) {
+            return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }
     }
 
     @GetMapping("/{id}")

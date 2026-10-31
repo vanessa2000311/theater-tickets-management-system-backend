@@ -16,4 +16,7 @@ public interface TicketBookingRepository extends JpaRepository<TicketBooking, UU
 
     List<TicketBooking> findByShowDateBetweenOrderByShowDateAsc(LocalDate start, LocalDate end);
 
+    boolean existsByCashierIdAndShowDateAndStatusNot(
+            UUID cashierId, LocalDate showDate, BookingStatus status);
+
 }

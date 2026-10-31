@@ -1,3 +1,4 @@
+
 package auca.ac.theaterticketsmanagementsystem.repository;
 
 import java.util.List;
@@ -13,5 +14,7 @@ public interface CashierRepository extends JpaRepository<Cashier, UUID> {
 
     @Query("SELECT DISTINCT c FROM Cashier c JOIN c.ticketClasses t WHERE LOWER(t.name) = LOWER(:name)")
     List<Cashier> findByTicketClassName(@Param("name") String name);
+
+    boolean existsByBoxOfficeCounterIdAndIdNot(UUID boxOfficeCounterId, UUID cashierId);
 
 }
