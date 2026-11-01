@@ -7,6 +7,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import auca.ac.theaterticketsmanagementsystem.model.BookingStatus;
@@ -79,6 +82,27 @@ public class TicketBookingService {
                 BookingStatus.PAID);
 
         return count + " ticket bookings cancelled";
+    }
+
+    public Page<TicketBooking> getTicketBookingsPage(int page, int size, String sort) {
+
+        String[] sortParts = sort.split(",");
+
+        String field = sortParts[0];
+
+        Sort.Direction direction = Sort.Direction.ASC;
+
+        if (sortParts.length > 1 &&
+                sortParts[1].equalsIgnoreCase("desc")) {
+            direction = Sort.Direction.DESC;
+        }
+
+        PageRequest pageRequest = PageRequest.of(
+                page,
+                size,
+                Sort.by(direction, field));
+
+        return ticketBookingRepository.findAll(pageRequest);
     }
 
     public String changeTicketBookingStatus(UUID id, BookingStatus newStatus) {
